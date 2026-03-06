@@ -7,7 +7,8 @@ from app import db
 class RefreshToken(db.Model):
     __tablename__ = "refresh_tokens"
 
-    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    id = db.Column(db.String(36), primary_key=True,
+                   default=lambda: str(uuid.uuid4()))
     user_id = db.Column(
         db.String(36),
         db.ForeignKey("users.id", ondelete="CASCADE"),
@@ -27,7 +28,10 @@ class RefreshToken(db.Model):
     user = db.relationship("User", back_populates="refresh_tokens")
 
     def is_valid(self) -> bool:
-        return not self.revoked and datetime.now(timezone.utc) < self.expires_at
+        expires = self.expires_at
+        if expires.tzinfo is None:
+            expires = expires.replace(tzinfo=timezone.utc)
+        return not self.revoked and datetime.now(timezone.utc) < expires
 
     def __repr__(self):
         return f"<RefreshToken user={self.user_id} revoked={self.revoked}>"
