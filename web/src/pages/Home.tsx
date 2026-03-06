@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom';
+import { useAuthStore } from '../store/authStore';
 
 const Home: React.FC = () => {
+  const accessToken = useAuthStore((s) => s.accessToken);
+
   return (
     <main
       style={{
@@ -58,48 +61,53 @@ const Home: React.FC = () => {
       </p>
 
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-        <Link
-          to='/signup'
-          style={{
-            background: 'var(--accent)',
-            color: '#000',
-            padding: '0.85rem 2rem',
-            borderRadius: 'var(--radius)',
-            fontWeight: 700,
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.875rem',
-            letterSpacing: '0.02em',
-            transition: 'opacity var(--transition)',
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
-          onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
-        >
-          Get started — free
-        </Link>
-        <Link
-          to='/login'
-          style={{
-            border: '1px solid var(--border)',
-            padding: '0.85rem 2rem',
-            borderRadius: 'var(--radius)',
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.875rem',
-            color: 'var(--text-dim)',
-            transition: 'all var(--transition)',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = 'var(--border-focus)';
-            e.currentTarget.style.color = 'var(--text)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = 'var(--border)';
-            e.currentTarget.style.color = 'var(--text-dim)';
-          }}
-        >
-          Log in
-        </Link>
+        {accessToken ? (
+          <Link
+            to='/dashboard'
+            style={{
+              background: 'var(--accent)',
+              color: '#000',
+              padding: '0.85rem 2rem',
+              borderRadius: 'var(--radius)',
+              fontWeight: 700,
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.875rem',
+            }}
+          >
+            Go to Dashboard →
+          </Link>
+        ) : (
+          <>
+            <Link
+              to='/signup'
+              style={{
+                background: 'var(--accent)',
+                color: '#000',
+                padding: '0.85rem 2rem',
+                borderRadius: 'var(--radius)',
+                fontWeight: 700,
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.875rem',
+              }}
+            >
+              Get started — free
+            </Link>
+            <Link
+              to='/login'
+              style={{
+                border: '1px solid var(--border)',
+                padding: '0.85rem 2rem',
+                borderRadius: 'var(--radius)',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.875rem',
+                color: 'var(--text-dim)',
+              }}
+            >
+              Log in
+            </Link>
+          </>
+        )}
       </div>
-
       <div
         style={{
           marginTop: '4rem',

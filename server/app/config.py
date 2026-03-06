@@ -7,7 +7,8 @@ load_dotenv()
 def _require(key: str) -> str:
     value = os.getenv(key)
     if not value:
-        raise RuntimeError(f"Required environment variable '{key}' is not set.")
+        raise RuntimeError(
+            f"Required environment variable '{key}' is not set.")
     return value
 
 
@@ -26,8 +27,10 @@ class Config:
 
     # JWT
     JWT_SECRET: str = _require("JWT_SECRET")
-    JWT_ACCESS_TOKEN_EXPIRES_MINUTES: int = int(os.getenv("JWT_ACCESS_EXPIRES_MINUTES", "15"))
-    JWT_REFRESH_TOKEN_EXPIRES_DAYS: int = int(os.getenv("JWT_REFRESH_EXPIRES_DAYS", "7"))
+    JWT_ACCESS_TOKEN_EXPIRES_MINUTES: int = int(
+        os.getenv("JWT_ACCESS_EXPIRES_MINUTES", "15"))
+    JWT_REFRESH_TOKEN_EXPIRES_DAYS: int = int(
+        os.getenv("JWT_REFRESH_EXPIRES_DAYS", "7"))
 
     # OpenAI
     OPENAI_API_KEY: str = _require("OPENAI_API_KEY")
@@ -41,7 +44,7 @@ class Config:
     FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://localhost:5173")
 
     # PR size limit
-    PR_MAX_LINES: int = int(os.getenv("PR_MAX_LINES", "500"))
+    PR_MAX_LINES: int = int(os.getenv("PR_MAX_LINES", "4000"))
 
 
 class TestConfig(Config):

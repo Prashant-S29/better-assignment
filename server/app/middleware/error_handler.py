@@ -7,7 +7,7 @@ from pydantic import ValidationError
 class AppError(Exception):
     """Base class for all application errors."""
 
-    status_code: int = 500
+    status_code: int = 4000
     code: str = "INTERNAL_ERROR"
     message: str = "An unexpected error occurred."
 
@@ -31,7 +31,7 @@ class PrivateRepoError(AppError):
 class PRTooLargeError(AppError):
     status_code = 422
     code = "PR_TOO_LARGE"
-    message = "This PR exceeds the 500 changed line limit. Please submit a smaller PR."
+    message = "This PR exceeds the 4000 changed line limit. Please submit a smaller PR."
 
 
 class GitHubRateLimitError(AppError):
@@ -47,7 +47,7 @@ class GitHubAPIError(AppError):
 
 
 class AIValidationError(AppError):
-    status_code = 500
+    status_code = 4000
     code = "AI_VALIDATION_ERROR"
     message = (
         "Review generation failed due to an unexpected AI response. Please try again."
@@ -138,7 +138,8 @@ def register_error_handlers(app: Flask):
     @app.errorhandler(ValidationError)
     def handle_validation_error(e: ValidationError):
         errors = [
-            {"field": ".".join(str(loc) for loc in err["loc"]), "message": err["msg"]}
+            {"field": ".".join(str(loc)
+                               for loc in err["loc"]), "message": err["msg"]}
             for err in e.errors()
         ]
         return jsonify(
@@ -165,4 +166,4 @@ def register_error_handlers(app: Flask):
     @app.errorhandler(Exception)
     def handle_generic(e: Exception):
         app.logger.exception("Unhandled exception: %s", str(e))
-        return _error_response("INTERNAL_ERROR", "An unexpected error occurred.", 500)
+        return _error_response("INTERNAL_ERROR", "An unexpected error occurred.", 4000)

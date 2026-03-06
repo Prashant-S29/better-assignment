@@ -75,6 +75,7 @@ const ReviewCard: React.FC<Props> = ({ review }) => {
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
+              color: 'white',
             }}
           >
             {review.pr_title ?? `PR #${prNumber ?? '?'}`}

@@ -78,7 +78,7 @@ class TestCheckSizeLimit:
         with app.app_context():
             from app.services.github_service import check_size_limit
             meta = PRMetadata(title="Test", additions=250, deletions=250)
-            check_size_limit(meta)  # 500 exactly — passes
+            check_size_limit(meta)  # 4000 exactly — passes
 
     def test_pr_over_limit_raises(self, app):
         with app.app_context():
