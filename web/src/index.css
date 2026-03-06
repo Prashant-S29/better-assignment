@@ -1,0 +1,75 @@
+/* ── Design Tokens ────────────────────────────────────────────── */
+:root {
+  --bg: #0a0a0a;
+  --bg-card: #111111;
+  --bg-hover: #161616;
+  --border: #222222;
+  --border-focus: #444444;
+
+  --text: #f0f0f0;
+  --text-muted: #666666;
+  --text-dim: #999999;
+
+  --accent: #e8ff47; /* electric lime — the one bold colour */
+  --accent-dim: #c8df30;
+  --red: #ff4747;
+  --green: #47ff8a;
+  --orange: #ffaa47;
+
+  --font-display: 'Syne', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  --radius: 6px;
+  --radius-lg: 12px;
+  --transition: 150ms ease;
+}
+
+/* ── Reset ────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-mono);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  background: none;
+}
+input,
+textarea {
+  font-family: inherit;
+}
+
+/* ── Utilities ────────────────────────────────────────────────── */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
