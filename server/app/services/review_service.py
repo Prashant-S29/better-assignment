@@ -8,8 +8,7 @@ from app.models.review import Review
 from app.schemas.review_schema import ReviewRequest
 import app.services.github_service as github_service
 import app.services.ai_service as ai_service
-from app.middleware.error_handler import AIValidationError, NotFoundError, ForbiddenError
-
+from app.middleware.error_handler import AIValidationError, NotFoundError, ForbiddenError, AppError
 logger = logging.getLogger(__name__)
 
 
@@ -52,7 +51,7 @@ def create_and_stream_review(pr_url: str, user_id: str) -> Generator[str, None, 
             accumulated += token
             yield f"data: {json.dumps({'token': token})}\n\n"
 
-        # 5. Validate accumulated output against AIReviewOutput schema
+        # 5. Validate accumulated output
         validated = ai_service.validate_ai_output(accumulated)
 
         # 6. Save completed review
@@ -63,23 +62,23 @@ def create_and_stream_review(pr_url: str, user_id: str) -> Generator[str, None, 
         logger.info("Review completed: %s", review.id)
         yield f"data: {json.dumps({'done': True, 'review_id': review.id})}\n\n"
 
-    except AIValidationError as e:
-        # AI returned bad output — mark failed, surface error
+    except AppError as e:
+        # Typed errors (PRTooLargeError, PrivateRepoError, etc.)
+        # — yield as SSE error so frontend receives it, then mark failed if review exists
         if review:
             review.status = "failed"
-            review.error_message = str(e)
+            review.error_message = e.message
             db.session.commit()
+        logger.warning("Review pipeline app error: %s", e.message)
         yield f"data: {json.dumps({'error': e.message})}\n\n"
 
     except Exception as e:
-        # Any other failure — mark failed, never leave pending
         if review:
             review.status = "failed"
             review.error_message = str(e)
             db.session.commit()
         logger.error("Review pipeline failed: %s", str(e))
-        # Re-raise typed errors so error_handler returns correct HTTP code
-        raise
+        yield f"data: {json.dumps({'error': 'An unexpected error occurred. Please try again.'})}\n\n"
 
 
 def get_review_by_id(review_id: str, user_id: str) -> Review:

@@ -16,4 +16,15 @@ const ProtectedRoute: React.FC<Props> = ({ children }) => {
   return <>{children}</>;
 };
 
+// Redirects logged-in users away from auth pages (login, signup, reset)
+export const PublicOnlyRoute: React.FC<Props> = ({ children }) => {
+  const accessToken = useAuthStore((s) => s.accessToken);
+
+  if (accessToken) {
+    return <Navigate to='/dashboard' replace />;
+  }
+
+  return <>{children}</>;
+};
+
 export default ProtectedRoute;

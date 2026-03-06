@@ -110,7 +110,7 @@ const ReviewForm: React.FC<Props> = ({ onSubmit, isLoading }) => {
             marginTop: '0.25rem',
           }}
         >
-          Only public GitHub repositories are supported. Max 500 changed lines.
+          Only public GitHub repositories are supported. Max 4000 changed lines.
         </p>
       </div>
     </form>
