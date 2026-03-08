@@ -31,7 +31,7 @@ An AI-powered code review tool. Paste a public GitHub PR URL, get a structured r
               │   Flask API         │
               │   Render            │
               │                     │
-              │  1. auth_middleware  │
+              │  1. auth_middleware │
               │     decode JWT,     │
               │     attach user_id  │
               │                     │
@@ -53,7 +53,7 @@ An AI-powered code review tool. Paste a public GitHub PR URL, get a structured r
   │ fetch PR     │  │          │  │ system prompt +   │
   │ metadata     │  │ INSERT   │  │ PR diff →         │
   │              │  │ review   │  │ stream=True       │
-  │ check 4000    │  │ status=  │  │                   │
+  │ check 4000   │  │ status=  │  │                   │
   │ line limit   │  │ pending  │  │ yields tokens     │
   │              │  │          │  │ one by one        │
   │ fetch diff   │  └──────────┘  └────────┬─────────┘
