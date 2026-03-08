@@ -46,6 +46,9 @@ class Config:
     # PR size limit
     PR_MAX_LINES: int = int(os.getenv("PR_MAX_LINES", "4000"))
 
+    # optional — raises rate limit to 5000/hr
+    GITHUB_TOKEN: str | None = os.getenv("GITHUB_TOKEN")
+
 
 class TestConfig(Config):
     """Overrides for test environment — skips required env var checks."""

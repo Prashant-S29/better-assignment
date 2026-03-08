@@ -15,6 +15,17 @@ logger = logging.getLogger(__name__)
 GITHUB_API_BASE = "https://api.github.com"
 
 
+def _github_headers(accept: str = "application/vnd.github.v3+json") -> dict:
+    headers = {
+        "Accept": accept,
+        "User-Agent": "ReviewBot/1.0",
+    }
+    token = current_app.config.get("GITHUB_TOKEN")
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    return headers
+
+
 def parse_pr_url(url: str) -> tuple[str, str, int]:
     """Extract (owner, repo, pr_number) from a validated GitHub PR URL."""
     # URL already validated by ReviewRequest schema — just parse
@@ -34,10 +45,7 @@ def fetch_pr_metadata(owner: str, repo: str, number: int) -> PRMetadata:
     url = f"{GITHUB_API_BASE}/repos/{owner}/{repo}/pulls/{number}"
     req = urllib.request.Request(
         url,
-        headers={
-            "Accept": "application/vnd.github.v3+json",
-            "User-Agent": "ReviewBot/1.0",
-        }
+        headers=_github_headers("application/vnd.github.v3+json")
     )
 
     try:
@@ -74,10 +82,7 @@ def fetch_pr_diff(owner: str, repo: str, number: int) -> str:
     url = f"{GITHUB_API_BASE}/repos/{owner}/{repo}/pulls/{number}"
     req = urllib.request.Request(
         url,
-        headers={
-            "Accept": "application/vnd.github.v3.diff",
-            "User-Agent": "ReviewBot/1.0",
-        }
+        headers=_github_headers("application/vnd.github.v3.diff")
     )
 
     try:
