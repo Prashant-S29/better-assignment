@@ -93,7 +93,7 @@ const ReviewResult: React.FC<Props> = ({ result, prTitle }) => {
         <div>
           <h3
             style={{
-              fontFamily: 'var(--font-display)',
+              // fontFamily: 'var(--font-display)',
               fontWeight: 800,
               fontSize: '1.25rem',
               marginBottom: '0.25rem',
